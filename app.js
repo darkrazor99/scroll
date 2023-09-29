@@ -1,4 +1,3 @@
-// slice extracts a section of a string without modifying original string
 //offsetTop - A Number, representing the top position of the element, in pixels
 
 // ********** set date ************
@@ -24,9 +23,11 @@ navToggle.addEventListener("click", () => {
 
 });
 
+
+// ********** fixed navbar ************
 const navbar = document.getElementById("nav");
 const topLink = document.querySelector(".top-link");
-// ********** fixed navbar ************
+
 window.addEventListener("scroll", () => {
     const scrollHeight = window.scrollY;
     const navHeight = navbar.getBoundingClientRect().height;
@@ -34,11 +35,36 @@ window.addEventListener("scroll", () => {
         navbar.classList.add("fixed-nav");
     else
         navbar.classList.remove("fixed-nav");
-
     if (scrollHeight > 500)
         topLink.classList.add("show-link");
     else
         topLink.classList.remove("show-link");
 });
+
+
 // ********** smooth scroll ************
 // select links
+const scrollLinks = document.querySelectorAll(".scroll-link");
+
+scrollLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+        e.preventDefault();
+        // navigate to
+        const id = e.currentTarget.getAttribute("href").slice(1);
+        const element = document.getElementById(id);
+        // calculate heights
+        const navHeight = navbar.getBoundingClientRect().height;
+        const containerHeight = linksContainer.getBoundingClientRect().height;
+        const fixedNav = navbar.classList.contains("fixed-nav");
+        let position = element.offsetTop - navHeight;
+        if (!fixedNav)
+            position = position - navHeight;
+        if (navHeight > 82)
+            position = position + containerHeight;
+        window.scrollTo({
+            left: 0,
+            top: position,
+        });
+        linksContainer.style.height = 0;
+    });
+});
